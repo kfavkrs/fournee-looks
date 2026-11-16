@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Look Editor</title>
+  <!-- The editor wears the saved look too: every colour is a --fr-* role, every text style an .fd-* class. -->
+  <link rel="stylesheet" href="src/theme/frosting.css">
+  <link rel="stylesheet" href="src/theme/mise-color.css">
+  <link rel="stylesheet" href="src/theme/fontdant.css">
+  <link rel="stylesheet" href="src/theme/mise-type.css">
+  <link rel="stylesheet" href="src/face-overrides.css">
+  <link rel="stylesheet" href="/editor.css">
+  <!-- Fournée's own checks, the same scripts tools/check.mjs runs -->
+  <script src="/fournee/frosting/dist/tokens.js"></script>
+  <script src="/fournee/frosting/src/readability.js"></script>
+  <script src="/fournee/frosting/src/gallery.js"></script>
+  <script src="/fournee/fontdant/dist/type-tokens.js"></script>
+  <script src="/fournee/fontdant/dist/library.js"></script>
+  <script src="/fournee/fontdant/src/fontface.js"></script>
+  <script src="/fournee/fontdant/src/typecheck.js"></script>
+  <script src="/fournee/kitchen/src/store.js"></script>
+  <script src="/fournee/kitchen/src/recipe.js"></script>
+  <script src="/fournee/kitchen/src/standards.js"></script>
+  <script src="/fournee/kitchen/src/pass.js"></script>
+  <script src="/fournee/fontdant/src/emit.js"></script>
+</head>
+<body>
+  <header class="bar">
+    <a class="fd-ui-sm back" href="/">← Recipe book</a>
+    <span id="look-name" class="fd-heading-sm">Look editor</span>
+    <label class="fd-ui-sm labels-toggle"><input type="checkbox" id="show-labels" checked> Show labels</label>
+    <span id="state" class="fd-ui-sm muted" aria-live="polite">Loading…</span>
+    <span class="spacer"></span>
+    <span id="tally" class="fd-ui-sm"></span>
+    <button id="revert" class="btn btn--ghost fd-ui--button" type="button" title="Go back to the version before your last save">Revert</button>
+    <button id="discard" class="btn btn--ghost fd-ui--button" type="button" disabled title="Throw away changes you haven't saved">Discard changes</button>
+    <button id="save" class="btn fd-ui--button" type="button" disabled>Save</button>
+  </header>
+  <div class="split">
+    <section class="preview" aria-label="Preview">
+      <iframe id="frame" title="Sample page preview" src="index.html"></iframe>
+    </section>
+    <aside class="panel" aria-label="Controls">
+      <div id="message" class="message fd-body-sm" hidden></div>
+      <p class="section-all fd-ui-sm"><button type="button" class="reset" id="open-all">Open all</button> · <button type="button" class="reset" id="close-all">Close all</button></p>
+      <details id="problems" class="block section" data-section="problems" open>
+        <summary><span class="chev" aria-hidden="true">▸</span><h2 id="problems-h" class="fd-heading-sm">Checks</h2></summary>
+        <div class="section-body">
+        <div id="problem-list"></div>
+      </div>
+      </details>
+      <details class="block section" data-section="fonts" open>
+        <summary><span class="chev" aria-hidden="true">▸</span><h2 id="fonts-h" class="fd-heading-sm">Fonts</h2></summary>
+        <div class="section-body">
+        <p class="fd-caption muted">Three font slots. Each text style below uses one of them.</p>
+        <div id="fonts"></div>
+      </div>
+      </details>
+      <details class="block section" data-section="styles" open>
+        <summary><span class="chev" aria-hidden="true">▸</span><h2 id="styles-h" class="fd-heading-sm">Text styles</h2></summary>
+        <div class="section-body">
+        <p class="fd-caption muted">Open a style to change it. The name after the dot is the class the page uses.</p>
+        <div id="styles"></div>
+      </div>
+      </details>
+      <details class="block section" data-section="spacing" open>
+        <summary><span class="chev" aria-hidden="true">▸</span><h2 id="spacing-h" class="fd-heading-sm">Spacing</h2></summary>
+        <div class="section-body">
+        <p class="fd-caption muted">White space on the page. Fournée doesn't cover spacing, so this is saved separately in type/spacing.json.</p>
+        <div id="spacing"></div>
+      </div>
+      </details>
+      <details class="block section" data-section="colours" open>
+        <summary><span class="chev" aria-hidden="true">▸</span><h2 id="colours-h" class="fd-heading-sm">Colours</h2></summary>
+        <div class="section-body">
+        <p class="fd-caption muted">Contrast is shown against the page background and card surface. Body text needs 4.5:1 or more.</p>
+        <div id="colours"></div>
+      </div>
+      </details>
+    </aside>
+  </div>
+  <script src="/editor.js"></script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+/* Recipe book: every look in looks/, with Open, Sample page, New from this, Rename and Delete. */
+(function () {
+  'use strict';
+  var $ = function (s, el) { return (el || document).querySelector(s); };
+  var looks = [];
+  var SWATCHES = ['bg', 'surface', 'text', 'muted', 'accent', 'button', 'series-1', 'series-2', 'series-3', 'series-4'];
+
+  function el(tag, attrs, kids) {
+    var e = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === 'class') e.className = attrs[k]; else if (k === 'text') e.textContent = attrs[k];
+      else if (k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), attrs[k]); else if (attrs[k] != null && attrs[k] !== false) e.setAttribute(k, attrs[k] === true ? '' : attrs[k]);
+    });
+    (kids || []).forEach(function (c) { if (c != null) e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function message(text) { var m = $('#message'); m.hidden = !text; m.textContent = text || ''; }
+  function post(path, body) {
+    return fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json(); })
+      .catch(function (e) { return { ok: false, error: 'Couldn’t reach the editor server. Is it still running? (' + e.message + ')' }; });
+  }
+
+  function load() {
+    return fetch('/api/looks').then(function (r) { return r.json(); }).then(function (d) { looks = d.looks; render(); })
+      .catch(function (e) { message('Couldn’t load the looks: ' + e.message); });
+  }
+
+  var render = function () {
+    var box = $('#looks'); box.innerHTML = '';
+    if (!looks.length) box.appendChild(el('p', { class: 'fd-body-sm muted', text: 'No looks yet. Deleted looks are in looks/_deleted/.' }));
+    looks.forEach(function (L) { box.appendChild(card(L)); });
+    var sel = $('#new-from'), keep = sel.value; sel.innerHTML = '';
+    looks.forEach(function (L) { sel.appendChild(el('option', { value: L.slug, text: L.name })); });
+    if (keep) sel.value = keep;
+  };
+
+  function card(L) {
+    var body = el('div', { class: 'look-body' });
+    var title = el('h2', { class: 'fd-heading-sm', text: L.name });
+    var fonts = el('p', { class: 'fd-caption muted', text: 'Display ' + L.faces.display + ' · Text ' + L.faces.text + ' · Mono ' + L.faces.mono });
+    var sw = el('div', { class: 'swatches', 'aria-hidden': 'true' }, SWATCHES.filter(function (k) { return L.colors[k]; }).map(function (k) {
+      return el('span', { title: k + ' ' + L.colors[k], style: 'background:' + L.colors[k] });
+    }));
+    var slot = el('div');   // rename / delete confirm appear here
+    var actions = el('div', { class: 'actions' }, [
+      el('a', { class: 'btn btn--small fd-ui-sm', href: '/look/' + L.slug + '/edit', text: 'Open' }),
+      el('a', { class: 'btn btn--small fd-ui-sm', href: '/look/' + L.slug + '/?clean', target: '_blank', rel: 'noopener', text: 'Sample page' }),
+      el('button', { class: 'btn btn--small fd-ui-sm', type: 'button', text: 'New from this', onclick: function () { openNew(L.slug); } }),
+      el('button', { class: 'btn btn--small fd-ui-sm', type: 'button', text: 'Rename', onclick: function () { renameUI(L, slot); } }),
+      el('button', { class: 'btn btn--small fd-ui-sm', type: 'button', text: 'Delete', onclick: function () { deleteUI(L, slot); } })
+    ]);
+    [title, fonts, sw, slot, actions].forEach(function (c) { body.appendChild(c); });
+    var thumb = el('a', { class: 'thumb', href: '/look/' + L.slug + '/edit', 'aria-label': 'Open ' + L.name }, [
+      el('iframe', { src: '/look/' + L.slug + '/?clean', title: L.name + ' preview', loading: 'lazy', tabindex: '-1', 'aria-hidden': 'true' })]);
+    // the card's buttons wear this look's own button colours
+    var vars = [['button', '--fr-button'], ['button-text', '--fr-button-text'], ['accent-text', '--fr-accent-text']]
+      .filter(function (v) { return L.colors[v[0]]; }).map(function (v) { return v[1] + ':' + L.colors[v[0]]; }).join(';');
+    return el('article', { class: 'look', id: 'look-' + L.slug, style: vars || null }, [thumb, body]);
+  }
+
+  function renameUI(L, slot) {
+    slot.innerHTML = '';
+    var input = el('input', { class: 'fd-ui-input', value: L.name, maxlength: '60', 'aria-label': 'New name for ' + L.name });
+    var err = el('p', { class: 'fd-body-sm error', hidden: true });
+    var go = function () {
+      var name = input.value.trim(); if (!name || name === L.name) { slot.innerHTML = ''; return; }
+      post('/api/looks/rename', { slug: L.slug, name: name }).then(function (d) {
+        if (d.error) { err.hidden = false; err.textContent = d.error; return; }
+        message('Renamed to ' + name + '.'); load();
+      });
+    };
+    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') go(); if (e.key === 'Escape') slot.innerHTML = ''; });
+    slot.appendChild(el('div', { class: 'rename' }, [input,
+      el('button', { class: 'btn fd-ui--button btn--small', type: 'button', text: 'Save name', onclick: go }),
+      el('button', { class: 'btn btn--ghost fd-ui--button btn--small', type: 'button', text: 'Cancel', onclick: function () { slot.innerHTML = ''; } })]));
+    slot.appendChild(err); input.focus(); input.select();
+  }
+
+  function deleteUI(L, slot) {
+    slot.innerHTML = '';
+    slot.appendChild(el('div', { class: 'confirm', role: 'alertdialog', 'aria-label': 'Delete ' + L.name }, [
+      el('p', { class: 'fd-body-sm', text: 'Delete ' + L.name + '? It moves to the looks/_deleted/ folder, so you can still get it back from there.' }),
+      el('div', { class: 'rename' }, [
+        el('button', { class: 'btn fd-ui--button btn--small', type: 'button', text: 'Delete ' + L.name, onclick: function () {
+          post('/api/looks/delete', { slug: L.slug }).then(function (d) {
+            if (d.error) { message(d.error); return; }
+            message(L.name + ' moved to looks/_deleted/.'); load();
+          });
+        } }),
+        el('button', { class: 'btn btn--ghost fd-ui--button btn--small', type: 'button', text: 'Keep it', onclick: function () { slot.innerHTML = ''; } })])]));
+  }
+
+  function openNew(from) {
+    var f = $('#newform'); f.hidden = false; $('#new-error').hidden = true;
+    if (from) $('#new-from').value = from;
+    $('#new-name').value = ''; $('#new-name').focus(); f.scrollIntoView({ block: 'nearest' });
+  }
+  $('#new').addEventListener('click', function () { openNew(); });
+  $('#new-cancel').addEventListener('click', function () { $('#newform').hidden = true; });
+  $('#newform').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = $('#new-name').value.trim(), err = $('#new-error');
+    if (!name) { err.hidden = false; err.textContent = 'Give the new look a name.'; return; }
+    err.hidden = false; err.textContent = 'Making ' + name + '…';
+    post('/api/looks/new', { from: $('#new-from').value, name: name }).then(function (d) {
+      if (d.slug) { location.href = '/look/' + d.slug + '/edit'; return; }
+      err.textContent = d.error || 'Something went wrong.';
+    });
+  });
+
+  // previews: the sample page drawn at 1100px wide, scaled down to fit each card
+  function fitThumbs() {
+    document.querySelectorAll('.thumb').forEach(function (t) {
+      var f = t.querySelector('iframe'); if (f) f.style.transform = 'scale(' + (t.clientWidth / 1100) + ')';
+    });
+  }
+  window.addEventListener('resize', fitThumbs);
+  var _render = render; render = function () { _render(); fitThumbs(); };
+
+  load();
+})();

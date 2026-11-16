@@ -1,0 +1,13 @@
+{
+  "section": 2,
+  "header-top": 3,
+  "cards": 1.5,
+  "card-padding": 1.5,
+  "paragraph": 1,
+  "under-hero": 2.75,
+  "under-title": 1.25,
+  "under-eyebrow": 1.5,
+  "under-heading": 1,
+  "under-heading-lg": 1.25,
+  "under-heading-md": 0.75
+}

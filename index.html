@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plum Crumb Sample</title>
+  <!-- Add ?clean to the address to hide the "Style:" labels and see the page as a reader would -->
+  <script>
+    // Labels off if the address has ?clean, or (opened on its own, not in the editor) if the switch was last left off
+    (function () {
+      var off = /[?&]clean\b/.test(location.search);
+      try { if (!off && window.self === window.top && localStorage.getItem('sample-labels') === 'off') off = true; } catch (e) {}
+      if (off) document.documentElement.classList.add('clean');
+    })();
+  </script>
+  <link rel="stylesheet" href="src/theme/frosting.css">
+  <link rel="stylesheet" href="src/theme/mise-color.css">
+  <link rel="stylesheet" href="src/theme/fontdant.css">
+  <link rel="stylesheet" href="src/theme/mise-type.css">
+  <!-- Per-style font choices: Fournée doesn't emit these yet (https://github.com/fournee/fournee/issues/1) -->
+  <link rel="stylesheet" href="src/face-overrides.css">
+  <!-- Page spacing (not part of Fournée): type/spacing.json, set in the look editor's Spacing section -->
+  <link rel="stylesheet" href="src/spacing.css">
+  <style>
+    /* Layout only. Every colour is a --fr-* role and every text style is an .fd-* class. */
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--fr-bg); color: var(--fr-text); }
+    .wrap { max-width: 60rem; margin: 0 auto; padding: 0 1rem; }
+    nav { border-bottom: 1px solid var(--fr-border); }
+    nav .wrap { display: flex; gap: 1.5rem; align-items: center; padding-block: 1rem; flex-wrap: wrap; }
+    nav a { color: var(--fr-text); text-decoration: none; }
+    nav a.here { color: var(--fr-accent-text); text-decoration: underline; text-underline-offset: 0.3em; }
+    header { padding-block: var(--sp-header-top, 3rem) var(--sp-section, 2rem); }
+    header p { margin: 0 0 0.5rem; }
+    header h1 { margin: 0 0 var(--sp-under-title, 1rem); }
+    header .hero { margin-bottom: var(--sp-under-hero, 1.5rem); }
+    .lede { color: var(--fr-muted); max-width: var(--fd-body-measure); margin: 0; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: var(--sp-cards, 1rem); margin-bottom: var(--sp-section, 2rem); }
+    .card { background: var(--fr-surface); border: 1px solid var(--fr-border); border-radius: 0.75rem; padding: var(--sp-card-padding, 1.5rem); }
+    .card h2, .card h3 { margin: 0 0 0.5rem; }
+    .card .fd-heading { margin-bottom: var(--sp-under-heading, 0.5rem); }
+    .card .fd-heading-lg { margin-bottom: var(--sp-under-heading-lg, 0.5rem); }
+    .card .fd-heading-md { margin-bottom: var(--sp-under-heading-md, 0.5rem); }
+    .card .fd-eyebrow, header .fd-eyebrow { margin-bottom: var(--sp-under-eyebrow, 0.5rem); }
+    .card p { margin: 0 0 var(--sp-paragraph, 1rem); }
+    .muted { color: var(--fr-muted); }
+    .fd-eyebrow { color: var(--fr-accent-text); }
+    /* Style tags: labels for this sample page only, not part of the look */
+    .tag { display: inline-block; margin: 0 0 1rem; padding: 0.15rem 0.6rem; border: 1px dashed var(--fr-border); border-radius: 1rem; color: var(--fr-muted); }
+    .clean .tag, .clean .style-label { display: none; }
+    /* "Style labels" on/off switch in the top bar (hidden inside the look editor, which has its own) */
+    .label-switch { margin-left: auto; display: inline-flex; align-items: center; gap: 0.6rem; background: none; border: 0; padding: 0.25rem 0; color: var(--fr-text); cursor: pointer; }
+    .label-switch .track { width: 2.5rem; height: 1.4rem; border-radius: 1rem; background: var(--fr-button); position: relative; transition: background 0.15s; }
+    .label-switch .knob { position: absolute; top: 0.2rem; left: 1.3rem; width: 1rem; height: 1rem; border-radius: 50%; background: var(--fr-button-text); transition: left 0.15s; }
+    .label-switch[aria-checked="false"] .track { background: var(--fr-border); }
+    .label-switch[aria-checked="false"] .knob { left: 0.2rem; }
+    .label-switch:focus-visible { outline: 2px solid var(--fr-accent); outline-offset: 4px; border-radius: 0.25rem; }
+    .in-editor .label-switch { display: none; }
+    .price { color: var(--fr-accent-text); }
+    .btn { background: var(--fr-button); color: var(--fr-button-text); border: 0; border-radius: 0.5rem; padding: 0.6rem 1.1rem; cursor: pointer; }
+    .btn--ghost { background: transparent; color: var(--fr-accent-text); border: 1px solid var(--fr-border); }
+    input.fd-ui--input { width: 100%; padding: 0.6rem 0.75rem; margin-bottom: 1rem; border: 1px solid var(--fr-border); border-radius: 0.5rem; background: var(--fr-bg); color: var(--fr-text); }
+    label { display: block; margin-bottom: 0.25rem; }
+    .row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .status { list-style: none; margin: 0; padding: 0; }
+    .status li { display: flex; align-items: center; gap: 0.6rem; }
+    .dot { width: 0.75rem; height: 0.75rem; border-radius: 50%; flex: none; }
+    .dot--ok { background: var(--fr-ok); } .dot--warn { background: var(--fr-warn); } .dot--bad { background: var(--fr-bad); }
+    .track { height: 0.6rem; background: var(--fr-progress-track); border-radius: 1rem; overflow: hidden; margin-block: 0.5rem 0.25rem; }
+    .fill { height: 100%; width: 68%; background: var(--fr-progress-fill); }
+    .bars { display: flex; align-items: flex-end; gap: 0.75rem; height: 8rem; border-bottom: 1px solid var(--fr-border); margin-bottom: 0.5rem; }
+    .bars span { flex: 1; border-radius: 0.3rem 0.3rem 0 0; }
+    .s1 { background: var(--fr-series-1); } .s2 { background: var(--fr-series-2); } .s3 { background: var(--fr-series-3); } .s4 { background: var(--fr-series-4); }
+    .legend { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+    .legend i { width: 0.75rem; height: 0.75rem; border-radius: 0.2rem; display: inline-block; }
+    pre.fd-mono-block { background: var(--fr-bg); border: 1px solid var(--fr-border); border-radius: 0.5rem; padding: 0.75rem 1rem; overflow-x: auto; margin: 0; }
+    footer { border-top: 1px solid var(--fr-border); padding-block: 1.5rem 3rem; }
+  </style>
+  <!-- Per-look extras (hand-written, not built): looks/<slug>/src/look.css. Colours as --fr-* roles only. -->
+  <link rel="stylesheet" href="src/look.css">
+</head>
+<body>
+  <nav aria-label="Main">
+    <div class="wrap">
+      <span class="fd-heading-sm">Sample</span>
+      <a class="fd-ui--nav here" href="#">Today</a>
+      <a class="fd-ui--nav" href="#">Menu</a>
+      <a class="fd-ui--nav" href="#">Orders</a>
+      <button type="button" class="label-switch fd-ui-sm" role="switch" aria-checked="true" id="label-switch">
+        <span>Style labels</span><span class="track" aria-hidden="true"><span class="knob"></span></span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <header>
+      <p class="fd-caption muted style-label">Style: Display (hero line)</p>
+      <p class="fd-display hero">Warm Bread, Every Morning</p>
+      <p class="fd-eyebrow">Today's specials</p>
+      <h1 class="fd-heading-xl">The Very Top Page Header</h1>
+      <p class="fd-body lede">This is body text in Josefin Sans at double line spacing. Read a few lines to see whether it feels airy or too spread out. Every colour, size, weight and space between lines on this page comes from your recipe, so changing the recipe and rebuilding changes all of it at once.</p>
+    </header>
+
+    <!-- One run of cards, 3 across; a leftover card sits alone at the left of the last row -->
+    <section class="grid" aria-label="Text styles and colours">
+      <article class="card">
+        <p class="fd-caption tag">Style: Heading, base</p>
+        <h2 class="fd-heading">A Plain Heading in the Base Style</h2>
+        <p class="fd-body">Heading base is the all-purpose heading. Use it where a heading doesn't need to be a particular size.</p>
+      </article>
+      <article class="card">
+        <p class="fd-caption tag">Style: Heading large, then Body</p>
+        <h2 class="fd-heading-lg">A Section Title That Is Long Enough to Wrap Onto a Second Line</h2>
+        <p class="fd-body">This is body text: the paragraph under a heading. The heading names the section; the body says what's in it. Headings use 1.5 line spacing and body text uses 2.</p>
+      </article>
+      <article class="card">
+        <p class="fd-caption tag">Style: Eyebrow, Heading medium, Small body, Caption</p>
+        <p class="fd-eyebrow">Fresh today</p>
+        <h3 class="fd-heading-md">Cardamom Morning Bun</h3>
+        <p class="fd-body-sm muted">Small body text, used for descriptions and secondary details.</p>
+        <p class="fd-heading-sm price">$4.75</p>
+        <p class="fd-caption muted">Caption: updated 12 Nov 2026 · prices include tax</p>
+      </article>
+      <article class="card">
+        <p class="fd-caption tag">Style: Labels, input and buttons</p>
+        <label class="fd-ui" for="name">Your name</label>
+        <input class="fd-ui--input" id="name" placeholder="Type here">
+        <div class="row">
+          <button class="btn fd-ui--button" type="button">Add to order</button>
+          <button class="btn btn--ghost fd-ui--button" type="button">Save for later</button>
+        </div>
+      </article>
+      <article class="card">
+        <p class="fd-caption tag">Colours: status dots and progress bar</p>
+        <ul class="status fd-body-sm">
+          <li><span class="dot dot--ok"></span>Ready (ok)</li>
+          <li><span class="dot dot--warn"></span>Running low (warn)</li>
+          <li><span class="dot dot--bad"></span>Sold out (bad)</li>
+        </ul>
+        <p class="fd-ui-sm" style="margin:1rem 0 0">Today's orders</p>
+        <div class="track"><div class="fill"></div></div>
+        <p class="fd-caption muted">68% of the way to the daily goal</p>
+      </article>
+      <article class="card">
+        <p class="fd-caption tag">Colours: chart series 1–4</p>
+        <div class="bars" role="img" aria-label="Bar chart using the four series colours">
+          <span class="s1" style="height:85%"></span><span class="s2" style="height:60%"></span>
+          <span class="s3" style="height:40%"></span><span class="s4" style="height:70%"></span>
+        </div>
+        <div class="legend fd-caption">
+          <span><i class="s1"></i>Bread</span><span><i class="s2"></i>Pastry</span>
+          <span><i class="s3"></i>Coffee</span><span><i class="s4"></i>Cakes</span>
+        </div>
+      </article>
+      <article class="card">
+        <p class="fd-caption tag">Style: Metric and Mono</p>
+        <p class="fd-metric" style="margin:0 0 0.5rem">1,284</p>
+        <p class="fd-caption muted">Big number style (metric)</p>
+        <pre class="fd-mono-block">order #9f2c4b
+total  $18.25</pre>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p class="fd-caption muted" style="margin:0">Built from type/recipe.json with Fournée. Edit the recipe, run <code class="fd-mono-inline">node type/build-type.mjs</code>, then reload.</p>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var root = document.documentElement, sw = document.getElementById('label-switch');
+      if (window.self !== window.top) { root.classList.add('in-editor'); return; }
+      function show() { sw.setAttribute('aria-checked', root.classList.contains('clean') ? 'false' : 'true'); }
+      show();
+      sw.addEventListener('click', function () {
+        var off = !root.classList.contains('clean');
+        root.classList.toggle('clean', off);
+        show();
+        try { localStorage.setItem('sample-labels', off ? 'off' : 'on'); } catch (e) {}
+        var u = new URL(location.href);
+        if (off) u.searchParams.set('clean', ''); else u.searchParams.delete('clean');
+        history.replaceState(null, '', u.toString().replace('clean=', 'clean'));
+      });
+    })();
+  </script>
+</body>
+</html>
