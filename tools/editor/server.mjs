@@ -33,7 +33,7 @@ if (!existsSync(join(fournee, 'kitchen', 'src', 'pass.js'))) {
 
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8', '.woff2': 'font/woff2', '.woff': 'font/woff',
-  '.ttf': 'font/ttf', '.otf': 'font/otf', '.svg': 'image/svg+xml', '.txt': 'text/plain; charset=utf-8' };
+  '.ttf': 'font/ttf', '.otf': 'font/otf', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.ico': 'image/x-icon', '.txt': 'text/plain; charset=utf-8' };
 
 // a path inside base, or null (no climbing out with ../)
 function inside(base, rel) {
@@ -139,6 +139,7 @@ const server = createServer(async (req, res) => {
         if (rest === '/' || rest === '/index.html') return sendFile(res, join(project, 'index.html'));
         if (rest === '/edit') return sendFile(res, join(here, 'editor.html'));
         if (rest.startsWith('/src/')) { const f = inside(join(dir, 'src'), rest.slice('/src/'.length)); return f ? sendFile(res, f) : send(res, 404, 'Not found'); }
+        if (rest.startsWith('/assets/')) { const f = inside(join(dir, 'assets'), rest.slice('/assets/'.length)); return f ? sendFile(res, f) : send(res, 404, 'Not found'); }
       }
       return send(res, 404, 'Not found');
     }

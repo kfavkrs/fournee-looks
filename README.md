@@ -49,6 +49,8 @@ saving the changes to GitHub.
   - `src/`: built by `tools/build-look.mjs`; don't edit by hand. `src/theme/` is Fournée's output;
     `src/spacing.css` is this project's addition; `src/look.css` holds hand-written
     extras for one look (colour roles only, no hex).
+  - `assets/` (optional): `logo.png` replaces "Sample" in the sample page's top bar; `icon.png` is the browser tab icon.
+    Hand-placed, never built or checked. A look without them shows neither.
 - `index.html`: the sample page, shared by every look. Add `?clean` to its address to hide the labels.
 - `tools/build-look.mjs <name>`: builds one look. `tools/check.mjs <name>`: Fournée's checks in Terminal.
 - `tools/editor/`: the recipe book and editor (a small Node server, no dependencies).

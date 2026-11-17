@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Plum Crumb Sample</title>
+  <!-- Optional per-look logo and tab icon: looks/<slug>/assets/logo.png and icon.png (a look without them shows none) -->
+  <link rel="icon" href="assets/icon.png">
   <!-- Add ?clean to the address to hide the "Style:" labels and see the page as a reader would -->
   <script>
     // Labels off if the address has ?clean, or (opened on its own, not in the editor) if the switch was last left off
@@ -27,6 +29,7 @@
     nav { border-bottom: 1px solid var(--fr-border); }
     nav .wrap { display: flex; gap: 1.5rem; align-items: center; padding-block: 1rem; flex-wrap: wrap; }
     nav a { color: var(--fr-text); text-decoration: none; }
+    nav .brand:not([hidden]) { display: block; height: 2.5rem; width: auto; }
     nav a.here { color: var(--fr-accent-text); text-decoration: underline; text-underline-offset: 0.3em; }
     header { padding-block: var(--sp-header-top, 3rem) var(--sp-section, 2rem); }
     header p { margin: 0 0 0.5rem; }
@@ -81,6 +84,7 @@
 <body>
   <nav aria-label="Main">
     <div class="wrap">
+      <img class="brand" src="assets/logo.png" alt="Logo" hidden onload="this.hidden = false; this.nextElementSibling.hidden = true;">
       <span class="fd-heading-sm">Sample</span>
       <a class="fd-ui--nav here" href="#">Today</a>
       <a class="fd-ui--nav" href="#">Menu</a>
