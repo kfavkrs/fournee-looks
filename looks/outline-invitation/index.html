@@ -4,12 +4,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bellefair&family=Josefin+Sans:wght@400;600&family=Tangerine:wght@400;700&display=swap">
 <style>
-  /* Layout: a single invitation card of textured cream stock, inset double rule, centred header,
-     then the outline of toggles set flush left inside the card. One printed look, light only by choice. */
+  /* Layout: a single invitation card of lightly textured stock, everything set flush left;
+     the eyebrows are toggles too, holding their own toggles. One printed look, light only by choice. */
   :root {
     color-scheme: light;
-    --table: #efece6;          /* the surface the card rests on */
-    --paper: #fdfbf6;          /* white with the faintest cream */
+    --table: #f0eeea;          /* the surface the card rests on */
+    --paper: #fdfcfa;          /* white with the barest hint of cream */
     --ink: #161513;            /* soft black, as printed */
     --rule: rgba(22, 21, 19, 0.55);
     --guide: rgba(22, 21, 19, 0.13);   /* the very light toggle line */
@@ -22,9 +22,9 @@
     --leading: 2;              /* double line spacing everywhere */
     --indent: 1.75rem;
     /* paper grain: fine fibre noise plus a soft cloudy mottle, both very faint */
-    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.42  0 0 0 0 0.37  0 0 0 0 0.30  0 0 0 0.1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    --mottle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.55  0 0 0 0 0.48  0 0 0 0 0.36  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
-    --fibres: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='340' height='340'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.004 0.35' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5  0 0 0 0 0.45  0 0 0 0 0.38  0 0 0 0.07 -0.012'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.42  0 0 0 0 0.37  0 0 0 0 0.30  0 0 0 0.13 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    --mottle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.55  0 0 0 0 0.48  0 0 0 0 0.36  0 0 0 0.065 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
+    --fibres: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='340' height='340'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.004 0.35' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5  0 0 0 0 0.45  0 0 0 0 0.38  0 0 0 0.09 -0.012'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
   }
 
   body {
@@ -43,8 +43,7 @@
     padding: 1rem;
   }
   .frame {
-    border: 1px solid var(--rule); outline: 1px solid var(--rule); outline-offset: -6px;
-    padding-block: 3.5rem 3rem; padding-inline: clamp(1.25rem, 6vw, 3.5rem);
+    padding-block: 3rem 2.5rem; padding-inline: clamp(1.25rem, 6vw, 3.5rem);
     display: grid; gap: 2.75rem; min-width: 0;
   }
 
@@ -52,15 +51,22 @@
     font-family: var(--face-eyebrow); font-size: var(--size-eyebrow); line-height: var(--leading);
     text-transform: uppercase; letter-spacing: 0.2em; font-weight: 600; margin: 0;
   }
-  header { display: grid; gap: 0.25rem; text-align: center; justify-items: center; }
+  header { display: grid; gap: 0.25rem; }
   h1 {
     font-family: var(--face-title); font-weight: 700; font-size: var(--size-title);
     line-height: 1.1; margin: 0; text-wrap: balance;
   }
   .lede { margin: 0; max-width: 30rem; text-wrap: balance; }
-  .flourish { width: 4.5rem; height: 1px; background: var(--rule); margin-top: 0.75rem; }
 
-  section { display: grid; gap: 0.5rem; min-width: 0; }
+  .sections { display: grid; gap: 1.5rem; min-width: 0; }
+  details.section > summary { font-family: var(--face-eyebrow); font-size: var(--size-eyebrow); text-transform: uppercase; letter-spacing: 0.2em; font-weight: 600; }
+  details.section > summary { align-items: center; }
+  details.section > summary::before {   /* same triangle as the other toggles, not scaled down with the small caps */
+    border-left-width: calc(var(--size-toggle) * 0.42); border-top-width: calc(var(--size-toggle) * 0.27); border-bottom-width: calc(var(--size-toggle) * 0.27);
+    transform: translateY(-0.08em);
+  }
+  details.section[open] > summary::before { transform: translateY(-0.08em) rotate(90deg); }
+  details.section > .body { margin-top: 0.25rem; }
   .outline { display: grid; min-width: 0; }
 
   details { font-size: var(--size-toggle); line-height: var(--leading); }
@@ -83,7 +89,7 @@
   .body p { margin: 0; }
   .body ul { margin: 0; padding-left: 1.1rem; }
 
-  footer { text-align: center; display: grid; gap: 0.25rem; justify-items: center; }
+  footer { display: grid; gap: 0.25rem; }
   footer p { margin: 0; }
 
   @media (max-width: 30rem) {
@@ -101,12 +107,12 @@
       <p class="eyebrow">You are warmly invited to</p>
       <h1>The Autumn Retreat</h1>
       <p class="lede">A quiet day of reflection, conversation and good bread, among friends old and new.</p>
-      <div class="flourish" aria-hidden="true"></div>
     </header>
 
-    <section>
-      <p class="eyebrow">The particulars</p>
-      <div class="outline">
+    <div class="sections">
+    <details class="section" open>
+      <summary>The particulars</summary>
+      <div class="body outline">
         <details open>
           <summary>When</summary>
           <div class="body">
@@ -136,11 +142,11 @@
           </div>
         </details>
       </div>
-    </section>
+    </details>
 
-    <section>
-      <p class="eyebrow">The day itself</p>
-      <div class="outline">
+    <details class="section" open>
+      <summary>The day itself</summary>
+      <div class="body outline">
         <details open>
           <summary>Morning</summary>
           <div class="body">
@@ -160,7 +166,8 @@
           </div>
         </details>
       </div>
-    </section>
+    </details>
+    </div>
 
     <footer>
       <p class="eyebrow">Kindly reply by the first of November</p>
