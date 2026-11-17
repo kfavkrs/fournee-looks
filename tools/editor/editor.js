@@ -96,7 +96,7 @@
   function applyPreview() {
     var doc = frame.contentDocument; if (!doc || !doc.head) return;
     var links = Array.prototype.slice.call(doc.querySelectorAll('link[rel=stylesheet]')).filter(function (l) {
-      return /(mise-type|mise-color|face-overrides)\.css/.test(l.getAttribute('href'));
+      return /(mise-type|mise-color)\.css/.test(l.getAttribute('href'));
     });
     var faces = doc.getElementById('ed-faces'), vars = doc.getElementById('ed-vars'), space = doc.getElementById('ed-space');
     if (!dirty()) {   // saved: show the real built files
@@ -115,10 +115,8 @@
     var key = JSON.stringify(fd().faces);
     if (key !== facesKey) { faces.textContent = faceText; facesKey = key; }
     var colours = recipe.frosting.colors;
-    var fam = Object.keys(roles()).filter(function (n) { return SLOTS.indexOf(roles()[n].face) >= 0; })
-      .map(function (n) { return '  --fd-' + n + '-family: var(--fd-face-' + roles()[n].face + ');'; });
     vars.textContent = out.text.slice(out.fonts.css.length) +
-      '\n:root {\n' + fam.join('\n') + '\n}\n:root:root:root {\n' +
+      '\n:root:root:root {\n' +
       Object.keys(colours).map(function (k) { return '  --fr-' + k + ': ' + colours[k] + ';'; }).join('\n') + '\n  color-scheme: light;\n}\n';
     links.forEach(function (l) { l.disabled = true; });
   }

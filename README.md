@@ -47,7 +47,7 @@ saving the changes to GitHub.
   - `recipe.json` the look (a Fournée recipe), `spacing.json` its spacing, `accepted.json` its accepted warnings,
     `*.prev.json` the version before the last save.
   - `src/`: built by `tools/build-look.mjs`; don't edit by hand. `src/theme/` is Fournée's output;
-    `src/face-overrides.css` and `src/spacing.css` are this project's additions; `src/look.css` holds hand-written
+    `src/spacing.css` is this project's addition; `src/look.css` holds hand-written
     extras for one look (colour roles only, no hex).
 - `index.html`: the sample page, shared by every look. Add `?clean` to its address to hide the labels.
 - `tools/build-look.mjs <name>`: builds one look. `tools/check.mjs <name>`: Fournée's checks in Terminal.
@@ -56,8 +56,6 @@ saving the changes to GitHub.
 
 ## Fournée gaps this works around
 
-- A style's own font choice is checked but not written to the CSS: [fournee#1](https://github.com/fournee/fournee/issues/1).
-  `src/face-overrides.css` fills the gap.
 - Spacing isn't part of Fournée, so it lives in `spacing.json` here.
 
 Some looks are kept private and aren't in this repo.
