@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bellefair&family=Josefin+Sans:wght@400;600&family=Tangerine:wght@400;700&display=swap">
 <style>
   /* Layout: one centred reading column; a traditional numbered outline (I, A, 1, a, i) where every line is a toggle,
-     each level indented on a faint guide, set close in Bellefair at 1.15.
+     each level's toggles set directly under its parent's number, set close in Bellefair at 1.15.
      A quiet tool bar sits at the bottom for touch screens (the same actions as the keyboard shortcuts). */
   :root {
     --bg: #ffffff;
@@ -20,13 +20,13 @@
     --face-title: "Tangerine", "Apple Chancery", cursive;
     --face-text: "Bellefair", "Cormorant Garamond", Georgia, serif;
     --face-eyebrow: "Josefin Sans", "Futura", "Century Gothic", sans-serif;
-    --size-title: 5.5rem;
+    --size-title: 4.125rem;   /* three quarters of the Outline look's 5.5rem */
     --size-toggle: 1.25rem;   /* every line inside a toggle uses this one size */
     --size-eyebrow: 0.8125rem;
     --leading: 2;             /* header and tools keep double spacing */
     --leading-outline: 1.15;  /* the outline itself is set close */
     --marker: 2.4em;          /* room for the widest number, e.g. VIII */
-    --indent: 2.25rem;
+    --indent: 1.5rem;         /* exactly the toggle column, so children start under the parent's number */
   }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #000000; --fg: #ffffff; --line: #ffffff; --faint: rgba(255, 255, 255, 0.45); --guide: rgba(255, 255, 255, 0.18); color-scheme: dark; } }
   :root[data-theme="dark"] { --bg: #000000; --fg: #ffffff; --line: #ffffff; --faint: rgba(255, 255, 255, 0.45); --guide: rgba(255, 255, 255, 0.18); color-scheme: dark; }
@@ -83,7 +83,7 @@
   }
   .twist.empty { color: var(--faint); }
   .group.open > .row > .twist::before { transform: rotate(90deg); }
-  .body { margin-left: 0.2rem; padding-left: calc(var(--indent) - 0.2rem); border-left: 1px solid var(--guide); display: grid; min-width: 0; }
+  .body { padding-left: var(--indent); display: grid; min-width: 0; }   /* no guide line: each level's toggles sit straight under its parent's number */
   .outline > .row:not(:first-child), .outline > .group:not(:first-child) { margin-top: 0.75rem; }
 
   .loading { color: var(--faint); margin: 0; }
@@ -97,7 +97,7 @@
   .tools .keys { color: var(--faint); font-family: var(--face-eyebrow); font-size: var(--size-eyebrow); line-height: 1.6; flex-basis: 100%; }
 
   @media (max-width: 30rem) {
-    :root { --size-title: 4rem; --indent: 1.5rem; --marker: 2.1em; }
+    :root { --size-title: 3rem; --marker: 2.1em; }
     .tools .keys { display: none; }
   }
   @media (hover: none) { .tools .keys { display: none; } }
