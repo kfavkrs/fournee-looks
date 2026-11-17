@@ -1,0 +1,145 @@
+<title>Outline Title Fonts</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bellefair&family=Belleza&family=Josefin+Sans:wght@600&family=Libre+Baskerville&family=Libre+Franklin:wght@600&family=Montserrat:wght@500&family=Questrial&family=Raleway:wght@500&family=Work+Sans:wght@500&display=swap">
+<style>
+  /* Layout: the top of the Traditional Outline repeated once per title face, so each can be judged in place. */
+  :root {
+    --bg: #ffffff; --fg: #000000; --faint: rgba(0, 0, 0, 0.4); --rule: rgba(0, 0, 0, 0.13);
+    --face-text: "Bellefair", "Cormorant Garamond", Georgia, serif;
+    --face-eyebrow: "Josefin Sans", "Futura", "Century Gothic", sans-serif;
+    --size-toggle: 1.25rem; --size-eyebrow: 0.8125rem;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #000000; --fg: #ffffff; --faint: rgba(255, 255, 255, 0.45); --rule: rgba(255, 255, 255, 0.18); color-scheme: dark; } }
+  :root[data-theme="dark"] { --bg: #000000; --fg: #ffffff; --faint: rgba(255, 255, 255, 0.45); --rule: rgba(255, 255, 255, 0.18); color-scheme: dark; }
+  body {
+    background: var(--bg); color: var(--fg); font-family: var(--face-text); font-size: var(--size-toggle); line-height: 2;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 3rem 4rem;
+  }
+  .page { max-width: 40rem; margin: 0 auto; display: grid; gap: 0; }
+  .intro { color: var(--faint); margin: 0 0 1rem; }
+  .opt { display: grid; gap: 0.5rem; padding-block: 2.5rem; border-top: 1px solid var(--rule); min-width: 0; }
+  .opt > p, .opt > h2 { margin: 0; }
+  .label, .eyebrow { font-family: var(--face-eyebrow); font-size: var(--size-eyebrow); font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; }
+  .label { color: var(--faint); margin-bottom: 0.75rem !important; }
+  h2 { font-family: var(--t-face); font-weight: var(--t-weight); font-size: var(--t-size); letter-spacing: var(--t-ls); line-height: var(--t-lh); text-wrap: balance; }
+  .outline { line-height: 1.15; margin-top: 1.5rem; }
+  .row { display: grid; grid-template-columns: 1.5rem 2.4em minmax(0, 1fr); align-items: baseline; padding-block: 0.15em; }
+  .row.gap { margin-top: 0.75rem; }
+  .kids { padding-left: 1.5rem; }
+  .tw { height: 1.15em; display: inline-flex; align-items: center; align-self: start; }
+  .tw::before { content: ""; border-left: 0.42em solid currentColor; border-top: 0.27em solid transparent; border-bottom: 0.27em solid transparent; }
+  .tw.open::before { transform: rotate(90deg); }
+  .tw.empty { color: var(--faint); }
+  @media (max-width: 30rem) { h2 { font-size: var(--t-size-phone); } }
+</style>
+
+<main class="page">
+  <p class="intro">Sans-serif title faces for the Traditional Outline, against Bellefair underneath. Everything below each title stays as it is now; only the title changes.</p>
+    <section class="opt" style="--t-face:'Libre Baskerville', serif; --t-weight:400; --t-size:2.4rem; --t-size-phone:1.9rem; --t-ls:normal; --t-lh:1.2;">
+      <p class="label">For comparison: Libre Baskerville</p>
+      <p class="eyebrow">Planning outline</p>
+      <h2>The Autumn Retreat</h2>
+      <p class="lede">Everything to arrange, in order, from the invitation to the thank-you notes.</p>
+      <div class="outline">
+        <div class="row"><span class="tw open"></span><span class="mk">I</span><span>Before the day</span></div>
+        <div class="kids">
+          <div class="row"><span class="tw open"></span><span class="mk">A</span><span>Invitations</span></div>
+          <div class="kids"><div class="row"><span class="tw empty"></span><span class="mk">1</span><span>Write the invitation</span></div></div>
+          <div class="row"><span class="tw"></span><span class="mk">B</span><span>The room</span></div>
+        </div>
+        <div class="row gap"><span class="tw"></span><span class="mk">II</span><span>The day itself</span></div>
+      </div>
+    </section>
+    <section class="opt" style="--t-face:'Libre Franklin', sans-serif; --t-weight:600; --t-size:2.5rem; --t-size-phone:2rem; --t-ls:-0.01em; --t-lh:1.15;">
+      <p class="label">A · Libre Franklin</p>
+      <p class="eyebrow">Planning outline</p>
+      <h2>The Autumn Retreat</h2>
+      <p class="lede">Everything to arrange, in order, from the invitation to the thank-you notes.</p>
+      <div class="outline">
+        <div class="row"><span class="tw open"></span><span class="mk">I</span><span>Before the day</span></div>
+        <div class="kids">
+          <div class="row"><span class="tw open"></span><span class="mk">A</span><span>Invitations</span></div>
+          <div class="kids"><div class="row"><span class="tw empty"></span><span class="mk">1</span><span>Write the invitation</span></div></div>
+          <div class="row"><span class="tw"></span><span class="mk">B</span><span>The room</span></div>
+        </div>
+        <div class="row gap"><span class="tw"></span><span class="mk">II</span><span>The day itself</span></div>
+      </div>
+    </section>
+    <section class="opt" style="--t-face:'Montserrat', sans-serif; --t-weight:500; --t-size:2.3rem; --t-size-phone:1.85rem; --t-ls:normal; --t-lh:1.2;">
+      <p class="label">B · Montserrat</p>
+      <p class="eyebrow">Planning outline</p>
+      <h2>The Autumn Retreat</h2>
+      <p class="lede">Everything to arrange, in order, from the invitation to the thank-you notes.</p>
+      <div class="outline">
+        <div class="row"><span class="tw open"></span><span class="mk">I</span><span>Before the day</span></div>
+        <div class="kids">
+          <div class="row"><span class="tw open"></span><span class="mk">A</span><span>Invitations</span></div>
+          <div class="kids"><div class="row"><span class="tw empty"></span><span class="mk">1</span><span>Write the invitation</span></div></div>
+          <div class="row"><span class="tw"></span><span class="mk">B</span><span>The room</span></div>
+        </div>
+        <div class="row gap"><span class="tw"></span><span class="mk">II</span><span>The day itself</span></div>
+      </div>
+    </section>
+    <section class="opt" style="--t-face:'Raleway', sans-serif; --t-weight:500; --t-size:2.5rem; --t-size-phone:2rem; --t-ls:normal; --t-lh:1.2;">
+      <p class="label">C · Raleway</p>
+      <p class="eyebrow">Planning outline</p>
+      <h2>The Autumn Retreat</h2>
+      <p class="lede">Everything to arrange, in order, from the invitation to the thank-you notes.</p>
+      <div class="outline">
+        <div class="row"><span class="tw open"></span><span class="mk">I</span><span>Before the day</span></div>
+        <div class="kids">
+          <div class="row"><span class="tw open"></span><span class="mk">A</span><span>Invitations</span></div>
+          <div class="kids"><div class="row"><span class="tw empty"></span><span class="mk">1</span><span>Write the invitation</span></div></div>
+          <div class="row"><span class="tw"></span><span class="mk">B</span><span>The room</span></div>
+        </div>
+        <div class="row gap"><span class="tw"></span><span class="mk">II</span><span>The day itself</span></div>
+      </div>
+    </section>
+    <section class="opt" style="--t-face:'Belleza', sans-serif; --t-weight:400; --t-size:2.6rem; --t-size-phone:2.05rem; --t-ls:0.01em; --t-lh:1.15;">
+      <p class="label">D · Belleza</p>
+      <p class="eyebrow">Planning outline</p>
+      <h2>The Autumn Retreat</h2>
+      <p class="lede">Everything to arrange, in order, from the invitation to the thank-you notes.</p>
+      <div class="outline">
+        <div class="row"><span class="tw open"></span><span class="mk">I</span><span>Before the day</span></div>
+        <div class="kids">
+          <div class="row"><span class="tw open"></span><span class="mk">A</span><span>Invitations</span></div>
+          <div class="kids"><div class="row"><span class="tw empty"></span><span class="mk">1</span><span>Write the invitation</span></div></div>
+          <div class="row"><span class="tw"></span><span class="mk">B</span><span>The room</span></div>
+        </div>
+        <div class="row gap"><span class="tw"></span><span class="mk">II</span><span>The day itself</span></div>
+      </div>
+    </section>
+    <section class="opt" style="--t-face:'Work Sans', sans-serif; --t-weight:500; --t-size:2.5rem; --t-size-phone:2rem; --t-ls:-0.01em; --t-lh:1.15;">
+      <p class="label">E · Work Sans</p>
+      <p class="eyebrow">Planning outline</p>
+      <h2>The Autumn Retreat</h2>
+      <p class="lede">Everything to arrange, in order, from the invitation to the thank-you notes.</p>
+      <div class="outline">
+        <div class="row"><span class="tw open"></span><span class="mk">I</span><span>Before the day</span></div>
+        <div class="kids">
+          <div class="row"><span class="tw open"></span><span class="mk">A</span><span>Invitations</span></div>
+          <div class="kids"><div class="row"><span class="tw empty"></span><span class="mk">1</span><span>Write the invitation</span></div></div>
+          <div class="row"><span class="tw"></span><span class="mk">B</span><span>The room</span></div>
+        </div>
+        <div class="row gap"><span class="tw"></span><span class="mk">II</span><span>The day itself</span></div>
+      </div>
+    </section>
+    <section class="opt" style="--t-face:'Questrial', sans-serif; --t-weight:400; --t-size:2.6rem; --t-size-phone:2.05rem; --t-ls:normal; --t-lh:1.15;">
+      <p class="label">F · Questrial</p>
+      <p class="eyebrow">Planning outline</p>
+      <h2>The Autumn Retreat</h2>
+      <p class="lede">Everything to arrange, in order, from the invitation to the thank-you notes.</p>
+      <div class="outline">
+        <div class="row"><span class="tw open"></span><span class="mk">I</span><span>Before the day</span></div>
+        <div class="kids">
+          <div class="row"><span class="tw open"></span><span class="mk">A</span><span>Invitations</span></div>
+          <div class="kids"><div class="row"><span class="tw empty"></span><span class="mk">1</span><span>Write the invitation</span></div></div>
+          <div class="row"><span class="tw"></span><span class="mk">B</span><span>The room</span></div>
+        </div>
+        <div class="row gap"><span class="tw"></span><span class="mk">II</span><span>The day itself</span></div>
+      </div>
+    </section>
+</main>

@@ -2,7 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bellefair&family=Josefin+Sans:wght@400;600&family=Tangerine:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bellefair&family=Belleza&family=Josefin+Sans:wght@400;600&display=swap">
 <style>
   /* Layout: one centred reading column; a traditional numbered outline (I, A, 1, a, i) where every line is a toggle,
      each level's toggles set directly under its parent's number, set close in Bellefair at 1.15.
@@ -13,10 +13,10 @@
     --line: #000000;
     --faint: rgba(0, 0, 0, 0.4);
     --guide: rgba(0, 0, 0, 0.13);
-    --face-title: "Tangerine", "Apple Chancery", cursive;
+    --face-title: "Belleza", "Optima", "Candara", sans-serif;
     --face-text: "Bellefair", "Cormorant Garamond", Georgia, serif;
     --face-eyebrow: "Josefin Sans", "Futura", "Century Gothic", sans-serif;
-    --size-title: 4.125rem;   /* three quarters of the Outline look's 5.5rem */
+    --size-title: 2.6rem;
     --size-toggle: 1.25rem;   /* every line inside a toggle uses this one size */
     --size-eyebrow: 0.8125rem;
     --leading: 2;             /* header and tools keep double spacing */
@@ -43,8 +43,8 @@
   header { display: grid; gap: 0.5rem; min-width: 0; }
   header > * { margin: 0; }
   h1 {
-    font-family: var(--face-title); font-weight: 700; font-size: var(--size-title);
-    line-height: 1.1; text-wrap: balance;
+    font-family: var(--face-title); font-weight: 400; font-size: var(--size-title);
+    letter-spacing: 0.01em; line-height: 1.15; text-wrap: balance;
   }
   .lede { max-width: 34rem; }
 
@@ -93,7 +93,7 @@
   .tools .keys { color: var(--faint); font-family: var(--face-eyebrow); font-size: var(--size-eyebrow); line-height: 1.6; flex-basis: 100%; }
 
   @media (max-width: 30rem) {
-    :root { --size-title: 3rem; --marker: 2.1em; }
+    :root { --size-title: 2.05rem; --marker: 2.1em; }
     .tools .keys { display: none; }
   }
   @media (hover: none) { .tools .keys { display: none; } }
