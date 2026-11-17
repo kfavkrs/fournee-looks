@@ -167,6 +167,7 @@
   --fd-metric-leading: 2;
   --fd-heading-lg-size: calc(1.1875rem * var(--fd-scaling));
   --fd-heading-lg-weight: 400;
+  --fd-heading-lg-family: var(--fd-face-text);
   --fd-heading-lg-leading: 1.85;
   --fd-heading-lg-tracking: -0.025em;
   --fd-heading-xl-size: calc(1.875rem * var(--fd-scaling));
