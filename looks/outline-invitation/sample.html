@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Outline Invitation</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bellefair&family=Josefin+Sans:wght@400;600&family=Tangerine:wght@400;700&display=swap">
+<style>
+  /* Layout: a single invitation card of textured cream stock, inset double rule, centred header,
+     then the outline of toggles set flush left inside the card. One printed look, light only by choice. */
+  :root {
+    color-scheme: light;
+    --table: #efece6;          /* the surface the card rests on */
+    --paper: #fdfbf6;          /* white with the faintest cream */
+    --ink: #161513;            /* soft black, as printed */
+    --rule: rgba(22, 21, 19, 0.55);
+    --guide: rgba(22, 21, 19, 0.13);   /* the very light toggle line */
+    --face-title: "Tangerine", "Apple Chancery", cursive;
+    --face-text: "Bellefair", "Cormorant Garamond", Georgia, serif;
+    --face-eyebrow: "Josefin Sans", "Futura", "Century Gothic", sans-serif;
+    --size-title: 4.25rem;
+    --size-toggle: 1.25rem;    /* every line inside a toggle uses this one size */
+    --size-eyebrow: 0.8125rem;
+    --leading: 2;              /* double line spacing everywhere */
+    --indent: 1.75rem;
+    /* paper grain: fine fibre noise plus a soft cloudy mottle, both very faint */
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.42  0 0 0 0 0.37  0 0 0 0 0.30  0 0 0 0.1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    --mottle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.55  0 0 0 0 0.48  0 0 0 0 0.36  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
+    --fibres: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='340' height='340'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.004 0.35' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5  0 0 0 0 0.45  0 0 0 0 0.38  0 0 0 0.07 -0.012'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+  }
+
+  body {
+    background: var(--table); color: var(--ink);
+    font-family: var(--face-text); font-size: var(--size-toggle); line-height: var(--leading);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 3rem 4rem;
+  }
+
+  .card {
+    max-width: 42rem; margin: 0 auto; position: relative;
+    background-color: var(--paper);
+    background-image: var(--grain), var(--fibres), var(--mottle);
+    box-shadow: 0 1px 1px rgba(40, 32, 20, 0.06), 0 6px 18px rgba(40, 32, 20, 0.08), 0 24px 48px rgba(40, 32, 20, 0.06);
+    padding: 1rem;
+  }
+  .frame {
+    border: 1px solid var(--rule); outline: 1px solid var(--rule); outline-offset: -6px;
+    padding-block: 3.5rem 3rem; padding-inline: clamp(1.25rem, 6vw, 3.5rem);
+    display: grid; gap: 2.75rem; min-width: 0;
+  }
+
+  .eyebrow {
+    font-family: var(--face-eyebrow); font-size: var(--size-eyebrow); line-height: var(--leading);
+    text-transform: uppercase; letter-spacing: 0.2em; font-weight: 600; margin: 0;
+  }
+  header { display: grid; gap: 0.25rem; text-align: center; justify-items: center; }
+  h1 {
+    font-family: var(--face-title); font-weight: 700; font-size: var(--size-title);
+    line-height: 1.1; margin: 0; text-wrap: balance;
+  }
+  .lede { margin: 0; max-width: 30rem; text-wrap: balance; }
+  .flourish { width: 4.5rem; height: 1px; background: var(--rule); margin-top: 0.75rem; }
+
+  section { display: grid; gap: 0.5rem; min-width: 0; }
+  .outline { display: grid; min-width: 0; }
+
+  details { font-size: var(--size-toggle); line-height: var(--leading); }
+  summary {
+    list-style: none; cursor: pointer; display: grid; grid-template-columns: 1.5rem minmax(0, 1fr); align-items: baseline;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::before {
+    content: ""; width: 0; height: 0; justify-self: start; transform: translateY(-0.1em);
+    border-left: 0.42em solid var(--ink); border-top: 0.27em solid transparent; border-bottom: 0.27em solid transparent;
+    transition: transform 0.15s ease;
+  }
+  details[open] > summary::before { transform: translateY(-0.1em) rotate(90deg); }
+  summary:focus-visible { outline: 1px solid var(--rule); outline-offset: 4px; }
+
+  .body {
+    margin-left: 0.2rem; padding-left: calc(var(--indent) - 0.2rem);
+    border-left: 1px solid var(--guide); display: grid; min-width: 0;
+  }
+  .body p { margin: 0; }
+  .body ul { margin: 0; padding-left: 1.1rem; }
+
+  footer { text-align: center; display: grid; gap: 0.25rem; justify-items: center; }
+  footer p { margin: 0; }
+
+  @media (max-width: 30rem) {
+    :root { --size-title: 3.25rem; --indent: 1.25rem; }
+    body { padding-block: 1.5rem 2rem; }
+    .card { padding: 0.5rem; }
+    .frame { padding-block: 2.5rem 2rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { summary::before { transition: none; } }
+</style>
+
+<main class="card">
+  <div class="frame">
+    <header>
+      <p class="eyebrow">You are warmly invited to</p>
+      <h1>The Autumn Retreat</h1>
+      <p class="lede">A quiet day of reflection, conversation and good bread, among friends old and new.</p>
+      <div class="flourish" aria-hidden="true"></div>
+    </header>
+
+    <section>
+      <p class="eyebrow">The particulars</p>
+      <div class="outline">
+        <details open>
+          <summary>When</summary>
+          <div class="body">
+            <p>Saturday the eighth of November, from ten in the morning until four in the afternoon.</p>
+          </div>
+        </details>
+        <details open>
+          <summary>Where</summary>
+          <div class="body">
+            <p>The garden room, upstairs from the main hall.</p>
+            <details>
+              <summary>Finding your way</summary>
+              <div class="body">
+                <p>Come in by the side door on the courtyard. The stairs are just past the coat rack, and the lift is beside them.</p>
+              </div>
+            </details>
+          </div>
+        </details>
+        <details>
+          <summary>What to bring</summary>
+          <div class="body">
+            <ul>
+              <li>A warm layer for the morning silence</li>
+              <li>A journal or a few loose pages</li>
+              <li>Something to share at lunch</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section>
+      <p class="eyebrow">The day itself</p>
+      <div class="outline">
+        <details open>
+          <summary>Morning</summary>
+          <div class="body">
+            <p>Arrive in quiet. A welcome, a short reading, then twenty minutes of silence before anyone speaks.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Afternoon</summary>
+          <div class="body">
+            <p>Small circles of four, then an unhurried walk in the garden.</p>
+            <details>
+              <summary>Closing</summary>
+              <div class="body">
+                <p>Everyone names one thing they are taking home. The candles go out together.</p>
+              </div>
+            </details>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <footer>
+      <p class="eyebrow">Kindly reply by the first of November</p>
+      <p>to the hospitality team, so we can set a place for you.</p>
+    </footer>
+  </div>
+</main>
