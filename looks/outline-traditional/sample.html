@@ -10,6 +10,7 @@
 <style>
   /* Layout: one centred reading column; a traditional numbered outline (I, A, 1, a, i) where every line is a toggle,
      each level's toggles set directly under its parent's number, set close in Bellefair at 1.15.
+     Toggle, number and text are separated by one equal gap.
      A quiet tool bar sits at the bottom for touch screens (the same actions as the keyboard shortcuts). */
   :root {
     --bg: #ffffff;
@@ -25,8 +26,9 @@
     --size-eyebrow: 0.8125rem;
     --leading: 2;             /* header and tools keep double spacing */
     --leading-outline: 1.15;  /* the outline itself is set close */
-    --marker: 2.4em;          /* room for the widest number, e.g. VIII */
-    --indent: 1.5rem;         /* exactly the toggle column, so children start under the parent's number */
+    --twist: 0.45em;          /* the toggle triangle's own width */
+    --gap: 1em;               /* one equal space: toggle → number → text */
+    --indent: calc(var(--twist) + var(--gap));   /* children start under the parent's number */
   }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #000000; --fg: #ffffff; --line: #ffffff; --faint: rgba(255, 255, 255, 0.45); --guide: rgba(255, 255, 255, 0.18); color-scheme: dark; } }
   :root[data-theme="dark"] { --bg: #000000; --fg: #ffffff; --line: #ffffff; --faint: rgba(255, 255, 255, 0.45); --guide: rgba(255, 255, 255, 0.18); color-scheme: dark; }
@@ -38,7 +40,7 @@
     padding-right: max(16px, env(safe-area-inset-right, 0px));
     padding-block: 3rem 7rem;
   }
-  .page { max-width: 40rem; margin: 0 auto; display: grid; gap: 2.5rem; min-width: 0; }
+  .page { max-width: 40rem; margin: 0 auto; display: grid; gap: 1.75rem; min-width: 0; }
 
   .eyebrow-style {
     font-family: var(--face-eyebrow); font-size: var(--size-eyebrow); line-height: var(--leading);
@@ -59,21 +61,20 @@
   .outline [contenteditable].is-empty:not(:focus)::before { content: none; }
   .outline.single [contenteditable].is-empty::before { content: attr(data-placeholder); }
 
-  .controls { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: baseline; }
-  .controls button, .tools button {
+  .tools button {
     font-family: var(--face-eyebrow); font-size: var(--size-eyebrow); line-height: var(--leading);
     text-transform: uppercase; letter-spacing: 0.14em; font-weight: 600;
     background: none; color: var(--fg); border: 0; border-bottom: 1px solid var(--line); padding: 0; cursor: pointer;
   }
   .tools button:disabled { opacity: 0.35; cursor: default; }
-  .controls button:focus-visible, .tools button:focus-visible, .twist:focus-visible { outline: 1px solid var(--line); outline-offset: 4px; }
+  .tools button:focus-visible, .twist:focus-visible { outline: 1px solid var(--line); outline-offset: 4px; }
   .status { margin-left: auto; color: var(--faint); }
 
-  .outline { display: grid; min-width: 0; line-height: var(--leading-outline); }
-  .row { display: grid; grid-template-columns: 1.5rem var(--marker) minmax(0, 1fr); align-items: baseline; min-width: 0; padding-block: 0.15em; }
+  .outline { display: grid; min-width: 0; line-height: var(--leading-outline); position: relative; }
+  .row { position: relative; display: grid; grid-template-columns: var(--twist) auto minmax(0, 1fr); column-gap: var(--gap); align-items: baseline; min-width: 0; padding-block: 0.15em; }
   .marker { font-variant-numeric: lining-nums; white-space: nowrap; }
   .twist {
-    font: inherit; width: 1.5rem; height: calc(var(--leading-outline) * 1em); padding: 0; border: 0; background: none; cursor: pointer;
+    font: inherit; width: var(--twist); height: calc(var(--leading-outline) * 1em); padding: 0; border: 0; background: none; cursor: pointer;
     justify-self: start; align-self: start; display: inline-flex; align-items: center; color: var(--fg);
   }
   .twist::before {
@@ -88,6 +89,18 @@
 
   .loading { color: var(--faint); margin: 0; }
 
+  /* drag to move: a grip in the left margin of each line (mouse and trackpad only) */
+  .grip {
+    position: absolute; left: -1.6em; top: 0.15em; width: 1.2em; text-align: center;
+    color: var(--faint); cursor: grab; opacity: 0; user-select: none; -webkit-user-select: none; letter-spacing: -0.2em;
+  }
+  .row:hover > .grip, .grip.held { opacity: 1; }
+  .drag-src { opacity: 0.3; }
+  .drop-line { position: absolute; right: 0; height: 0; border-top: 2px solid var(--line); pointer-events: none; }
+  .drop-line::before { content: ""; position: absolute; left: -4px; top: -5px; width: 6px; height: 6px; border: 2px solid var(--line); border-radius: 50%; background: var(--bg); }
+  body.dragging, body.dragging * { cursor: grabbing !important; user-select: none !important; -webkit-user-select: none !important; }
+  @media (hover: none), (pointer: coarse) { .grip { display: none; } }
+
   .tools {
     position: fixed; left: 0; right: 0; bottom: 0; background: var(--bg); border-top: 1px solid var(--line);
     padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -97,7 +110,7 @@
   .tools .keys { color: var(--faint); font-family: var(--face-eyebrow); font-size: var(--size-eyebrow); line-height: 1.6; flex-basis: 100%; }
 
   @media (max-width: 30rem) {
-    :root { --size-title: 2.05rem; --marker: 2.1em; }
+    :root { --size-title: 2.05rem; }
     .tools .keys { display: none; }
   }
   @media (hover: none) { .tools .keys { display: none; } }
@@ -111,12 +124,6 @@
     <p class="lede" id="f-lede" contenteditable="plaintext-only" spellcheck="true" data-placeholder="A line or two about this outline"></p>
   </header>
 
-  <div class="controls">
-    <button type="button" id="open-all">Open all</button>
-    <button type="button" id="close-all">Close all</button>
-    <span class="eyebrow-style status" id="status" aria-live="polite"></span>
-  </div>
-
   <div class="outline" id="outline"><p class="loading">Opening your outline…</p></div>
 </main>
 
@@ -126,10 +133,12 @@
     <button type="button" data-act="redo" disabled>Redo</button>
     <button type="button" data-act="outdent">Outdent</button>
     <button type="button" data-act="indent">Indent</button>
-    <button type="button" data-act="toggle">Open / close</button>
+    <button type="button" data-act="open-all">Open all</button>
+    <button type="button" data-act="close-all">Close all</button>
     <button type="button" data-act="up">Move up</button>
     <button type="button" data-act="down">Move down</button>
-    <span class="keys">⌘Z undo · ⇧⌘Z redo · Enter new line · Tab indent · Shift Tab outdent · Ctrl/⌘ Enter open or close (on a line with nothing inside, starts one) · Alt Shift ↑ ↓ move</span>
+    <span class="eyebrow-style status" id="status" aria-live="polite"></span>
+    <span class="keys">⌘Z undo · ⇧⌘Z redo · Enter new line · Tab indent · Shift Tab outdent · Ctrl/⌘ Enter open or close (on a line with nothing inside, starts one) · Alt Shift ↑ ↓ move · drag ⋮⋮ to move a line (left or right changes its level)</span>
   </div>
 </div>
 
@@ -231,6 +240,7 @@
       if (kids) { tw.setAttribute('aria-expanded', it.open ? 'true' : 'false'); tw.setAttribute('aria-label', it.open ? 'Close' : 'Open'); }
       else tw.setAttribute('aria-label', 'Add a line inside');
       tw.dataset.id = it.id; row.appendChild(tw);
+      if (!readOnly) { var gp = document.createElement('span'); gp.className = 'grip'; gp.setAttribute('aria-hidden', 'true'); gp.textContent = '⋮⋮'; gp.dataset.id = it.id; row.appendChild(gp); }
       var mk = document.createElement('span'); mk.className = 'marker'; mk.setAttribute('aria-hidden', 'true'); mk.textContent = marker(it.depth, counts[it.depth]); row.appendChild(mk);
       var t = document.createElement('div'); t.className = 'text'; t.dataset.id = it.id;
       t.setAttribute('contenteditable', readOnly ? 'false' : 'plaintext-only'); t.spellcheck = true;
@@ -444,18 +454,89 @@
     f.addEventListener('paste', function (e) { e.preventDefault(); document.execCommand('insertText', false, (e.clipboardData || window.clipboardData).getData('text/plain').replace(/\s*\n\s*/g, ' ')); });
   });
 
-  document.getElementById('open-all').addEventListener('click', function () { checkpoint(); items.forEach(function (it) { it.open = true; }); render(); changed(); });
-  document.getElementById('close-all').addEventListener('click', function () { checkpoint(); items.forEach(function (it, i) { if (hasKids(i)) it.open = false; }); render(); changed(); });
+  function openAll() { checkpoint(); items.forEach(function (it) { it.open = true; }); rerenderKeepingFocus(); changed(); }
+  function closeAll() {
+    checkpoint(); items.forEach(function (it, i) { if (hasKids(i)) it.open = false; });
+    var a = document.activeElement, keep = a && a.classList && a.classList.contains('text') && visibleIds().indexOf(a.dataset.id) >= 0;
+    if (keep) rerenderKeepingFocus(); else render(); changed();
+  }
 
   document.querySelector('.tools').addEventListener('mousedown', function (e) { if (e.target.closest('button')) e.preventDefault(); });
   document.querySelector('.tools').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b || readOnly) return;
     if (b.dataset.act === 'undo') { undo(); return; } if (b.dataset.act === 'redo') { redo(); return; }
+    if (b.dataset.act === 'open-all') { openAll(); return; } if (b.dataset.act === 'close-all') { closeAll(); return; }
     var id = lastFocusId; if (!id || idx(id) < 0 || !textEl(id)) { setStatus('Click a line first'); return; }
     syncFromDom(id);
     if (document.activeElement !== textEl(id)) setCaret(textEl(id), textEl(id).textContent.length);
     ({ indent: indent, outdent: outdent, toggle: toggle, up: moveUp, down: moveDown })[b.dataset.act](id);
   });
+
+  /* ── drag to move: carry a line (and everything inside it) to a new place; left/right sets its level ── */
+  var drag = null;
+  function indentPx() {
+    var m = document.createElement('div'); m.style.width = 'var(--indent)'; m.style.position = 'absolute'; m.style.visibility = 'hidden';
+    outlineEl.appendChild(m); var w = m.getBoundingClientRect().width; outlineEl.removeChild(m); return w || 24;
+  }
+  function rowOf(id) { var t = textEl(id); return t && t.parentNode; }
+  outlineEl.addEventListener('pointerdown', function (e) {
+    var g = e.target.closest && e.target.closest('.grip');
+    if (!g || readOnly || e.button !== 0 || e.pointerType === 'touch') return;
+    e.preventDefault();
+    var a = document.activeElement; if (a && a.classList && a.classList.contains('text')) { syncFromDom(a.dataset.id); a.blur(); }
+    var i = idx(g.dataset.id); if (i < 0) return;
+    var block = {}; for (var k = i; k < subtreeEnd(i); k++) block[items[k].id] = true;
+    var row = rowOf(g.dataset.id), src = row.parentNode.classList.contains('group') && row.parentNode.firstChild === row ? row.parentNode : row;
+    var line = document.createElement('div'); line.className = 'drop-line'; line.style.display = 'none'; outlineEl.appendChild(line);
+    drag = { id: g.dataset.id, block: block, src: src, grip: g, line: line, x0: e.clientX, y0: e.clientY, depth0: items[i].depth, step: indentPx(), target: null, moved: false };
+    g.classList.add('held');
+    window.addEventListener('pointermove', dragMove); window.addEventListener('pointerup', dragEnd); window.addEventListener('pointercancel', dragCancel);
+    window.addEventListener('keydown', dragKey, true);
+  });
+  function dragMove(e) {
+    if (!drag) return;
+    if (!drag.moved) { if (Math.abs(e.clientX - drag.x0) < 3 && Math.abs(e.clientY - drag.y0) < 3) return; drag.moved = true; drag.src.classList.add('drag-src'); document.body.classList.add('dragging'); }
+    if (e.clientY < 40) window.scrollBy(0, -12); else if (e.clientY > window.innerHeight - 120) window.scrollBy(0, 12);
+    var vis = visibleIds().filter(function (id) { return !drag.block[id]; });
+    var prev = null, next = null;
+    for (var n = 0; n < vis.length; n++) {
+      var r = rowOf(vis[n]).getBoundingClientRect();
+      if (e.clientY < r.top + r.height / 2) { next = vis[n]; break; }
+      prev = vis[n];
+    }
+    var pi = prev ? idx(prev) : -1, ni = next ? idx(next) : -1;
+    var maxD = prev ? items[pi].depth + (hasKids(pi) && !items[pi].open ? 0 : 1) : 0;
+    var minD = next ? items[ni].depth : 0;
+    if (minD > maxD) minD = maxD;
+    var want = drag.depth0 + Math.round((e.clientX - drag.x0) / drag.step);
+    var d = Math.max(minD, Math.min(maxD, want));
+    drag.target = { prev: prev, next: next, depth: d };
+    var oRect = outlineEl.getBoundingClientRect(), y;
+    if (prev) y = rowOf(prev).getBoundingClientRect().bottom; else y = rowOf(next || vis[0]).getBoundingClientRect().top;
+    drag.line.style.display = ''; drag.line.style.top = (y - oRect.top) + 'px'; drag.line.style.left = (d * drag.step) + 'px';
+  }
+  function dragStop() {
+    window.removeEventListener('pointermove', dragMove); window.removeEventListener('pointerup', dragEnd); window.removeEventListener('pointercancel', dragCancel);
+    window.removeEventListener('keydown', dragKey, true);
+    document.body.classList.remove('dragging'); drag.src.classList.remove('drag-src'); drag.grip.classList.remove('held');
+    if (drag.line.parentNode) drag.line.parentNode.removeChild(drag.line);
+    var d = drag; drag = null; return d;
+  }
+  function dragCancel() { if (drag) dragStop(); }
+  function dragKey(e) { if (e.key === 'Escape' && drag) { e.preventDefault(); dragStop(); } }
+  function dragEnd() {
+    if (!drag) return;
+    var d = dragStop(); if (!d.moved || !d.target) return;
+    var before = JSON.stringify(body());
+    checkpoint();
+    var i = idx(d.id), block = items.splice(i, subtreeEnd(i) - i), shift = d.target.depth - block[0].depth;
+    block.forEach(function (b) { b.depth += shift; });
+    var at = d.target.next ? idx(d.target.next) : items.length;
+    Array.prototype.splice.apply(items, [at, 0].concat(block));
+    if (d.target.prev) { var p = idx(d.target.prev); if (d.target.depth > items[p].depth) items[p].open = true; }
+    if (JSON.stringify(body()) === before) { undoStack.pop(); updateHistoryButtons(); render(); return; }
+    render(); changed();
+  }
 
   /* ── saving ── */
   function setStatus(s) { statusEl.textContent = s; }
