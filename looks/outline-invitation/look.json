@@ -1,7 +1,7 @@
 {
   "name": "Outline Invitation",
   "standalone": true,
-  "about": "Not built with Fournée. A static sample of the Outline look as an invitation: lightly textured card, flush left, eyebrows as toggles, faint toggle line. index.html is the published source; sample.html is the same page with a doctype for the recipe book.",
+  "about": "Not built with Fournée. The Outline look as a typeable invitation: lightly textured card, flush left, eyebrows as toggles, faint toggle line, reply line at the foot. index.html is the published editor; sample.html is a static copy of the example invitation for the recipe book.",
   "online": "https://claude.ai/artifact/MBEr4yaaFk5ixdgy4Ghcgw",
   "preview": "sample.html",
   "fonts": {
