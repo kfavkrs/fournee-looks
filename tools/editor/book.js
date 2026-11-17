@@ -31,11 +31,32 @@
     if (!looks.length) box.appendChild(el('p', { class: 'fd-body-sm muted', text: 'No looks yet. Deleted looks are in looks/_deleted/.' }));
     looks.forEach(function (L) { box.appendChild(card(L)); });
     var sel = $('#new-from'), keep = sel.value; sel.innerHTML = '';
-    looks.forEach(function (L) { sel.appendChild(el('option', { value: L.slug, text: L.name })); });
+    looks.filter(function (L) { return !L.standalone; }).forEach(function (L) { sel.appendChild(el('option', { value: L.slug, text: L.name })); });
     if (keep) sel.value = keep;
   };
 
+  function standaloneCard(L) {
+    var body = el('div', { class: 'look-body' });
+    var title = el('h2', { class: 'fd-heading-sm', text: L.name });
+    var fonts = el('p', { class: 'fd-caption muted', text: Object.keys(L.fonts).map(function (k) { return k + ' ' + L.fonts[k]; }).join(' · ') });
+    var note = el('p', { class: 'fd-caption muted', text: 'Its own look, not built with Fournée' });
+    var sw = el('div', { class: 'swatches', 'aria-hidden': 'true' }, Object.keys(L.colors).map(function (k) {
+      return el('span', { title: k + ' ' + L.colors[k], style: 'background:' + L.colors[k] });
+    }));
+    var preview = '/look/' + L.slug + '/' + L.preview;
+    var actions = el('div', { class: 'actions' }, [
+      L.online ? el('a', { class: 'btn btn--small fd-ui-sm', href: L.online, target: '_blank', rel: 'noopener', text: 'Open' }) : null,
+      el('a', { class: 'btn btn--small fd-ui-sm', href: preview, target: '_blank', rel: 'noopener', text: 'Sample page' })
+    ]);
+    [title, fonts, note, sw, actions].forEach(function (c) { body.appendChild(c); });
+    var thumb = el('a', { class: 'thumb', href: L.online || preview, target: '_blank', rel: 'noopener', 'aria-label': 'Open ' + L.name }, [
+      el('iframe', { src: preview, title: L.name + ' preview', loading: 'lazy', tabindex: '-1', 'aria-hidden': 'true' })]);
+    var ink = L.colors.text || '#000000', paper = L.colors.bg || '#ffffff';
+    return el('article', { class: 'look', id: 'look-' + L.slug, style: '--fr-button:' + ink + ';--fr-button-text:' + paper + ';--fr-accent-text:' + ink }, [thumb, body]);
+  }
+
   function card(L) {
+    if (L.standalone) return standaloneCard(L);
     var body = el('div', { class: 'look-body' });
     var title = el('h2', { class: 'fd-heading-sm', text: L.name });
     var fonts = el('p', { class: 'fd-caption muted', text: 'Display ' + L.faces.display + ' · Text ' + L.faces.text + ' · Mono ' + L.faces.mono });

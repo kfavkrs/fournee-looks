@@ -51,6 +51,8 @@ saving the changes to GitHub.
     extras for one look (colour roles only, no hex).
   - `assets/` (optional): `logo.png` replaces "Sample" in the sample page's top bar; `icon.png` is the browser tab icon.
     Hand-placed, never built or checked. A look without them shows neither.
+- `looks/<name>/look.json` instead of `recipe.json`: a look **not built with Fournée** (e.g. `looks/outline`). The book shows it
+  with its fonts and a preview of its `preview` page; Open goes to its `online` address. Build, check and the editor skip it.
 - `index.html`: the sample page, shared by every look. Add `?clean` to its address to hide the labels.
 - `tools/build-look.mjs <name>`: builds one look. `tools/check.mjs <name>`: Fournée's checks in Terminal.
 - `tools/editor/`: the recipe book and editor (a small Node server, no dependencies).

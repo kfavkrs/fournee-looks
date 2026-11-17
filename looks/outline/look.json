@@ -1,0 +1,9 @@
+{
+  "name": "Outline",
+  "standalone": true,
+  "about": "Not built with Fournée. index.html is the typeable outline published online; mockup.html is the static sample.",
+  "online": "https://claude.ai/artifact/EYqwYPXZfD8faKZY7ByCTa",
+  "preview": "mockup.html",
+  "fonts": { "Title": "Tangerine", "Text": "Bellefair", "Eyebrow": "Josefin Sans" },
+  "colors": { "bg": "#ffffff", "text": "#000000" }
+}

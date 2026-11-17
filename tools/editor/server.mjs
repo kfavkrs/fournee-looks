@@ -64,6 +64,8 @@ const SLUG = /^[a-z0-9][a-z0-9-]{0,60}$/;
 const slugify = (name) => String(name).toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'look';
 const cleanName = (n) => (typeof n === 'string' ? n.replace(/[\u0000-\u001f<>]/g, ' ').trim().slice(0, 60) : '');
 function lookDir(slug) { return SLUG.test(slug || '') && existsSync(join(LOOKS, slug, 'recipe.json')) ? join(LOOKS, slug) : null; }
+// a look not built with Fournée: its own pages plus look.json { name, standalone: true, online, preview, fonts, colors }
+function standaloneDir(slug) { return SLUG.test(slug || '') && !existsSync(join(LOOKS, slug, 'recipe.json')) && existsSync(join(LOOKS, slug, 'look.json')) ? join(LOOKS, slug) : null; }
 // Fournée's font library, for display names (e.g. jetbrains-mono → JetBrains Mono)
 const LIB = (() => { try { const sb = { window: {} }; sb.window = sb; vm.createContext(sb); vm.runInContext(readFileSync(join(fournee, 'fontdant', 'dist', 'library.js'), 'utf8'), sb); return sb.FontdantLibrary.fonts; } catch { return {}; } })();
 const readJson = async (f, fb) => { try { return JSON.parse(await readFile(f, 'utf8')); } catch { return fb; } };
@@ -71,6 +73,14 @@ const readJson = async (f, fb) => { try { return JSON.parse(await readFile(f, 'u
 async function listLooks() {
   const out = [];
   for (const slug of (await readdir(LOOKS)).sort()) {
+    const sdir = standaloneDir(slug);
+    if (sdir) {
+      const j = await readJson(join(sdir, 'look.json'), null); if (!j) continue;
+      out.push({ slug, standalone: true, name: cleanName(j.name) || slug, online: /^https:\/\//.test(j.online || '') ? j.online : null,
+        preview: typeof j.preview === 'string' ? j.preview : 'index.html', fonts: j.fonts || {}, colors: j.colors || {},
+        updated: (await stat(join(sdir, 'look.json'))).mtimeMs });
+      continue;
+    }
     const dir = lookDir(slug); if (!dir) continue;
     const r = await readJson(join(dir, 'recipe.json'), null); if (!r) continue;
     const fonts = (r.fontdant && r.fontdant.fonts) || {}, faces = (r.fontdant && r.fontdant.faces) || {};
@@ -132,6 +142,12 @@ const server = createServer(async (req, res) => {
       let m = /^\/api\/look\/([^/]+)$/.exec(path);
       if (m) { const dir = lookDir(m[1]); return dir ? json(res, 200, await lookState(dir)) : json(res, 404, { error: 'No such look.' }); }
       m = /^\/look\/([^/]+)(\/.*)?$/.exec(path);
+      if (m && standaloneDir(m[1])) {
+        const rest = m[2] || '';
+        if (rest === '') { res.writeHead(302, { Location: `/look/${m[1]}/` + url.search }); return res.end(); }
+        const f = inside(standaloneDir(m[1]), rest === '/' ? 'index.html' : rest.slice(1));
+        return f && extname(f) !== '.json' ? sendFile(res, f) : send(res, 404, 'Not found');
+      }
       if (m) {
         const dir = lookDir(m[1]); if (!dir) return send(res, 404, 'No such look');
         const rest = m[2] || '';
